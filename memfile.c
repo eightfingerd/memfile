@@ -57,7 +57,7 @@ int mfseek (MEMFILE *mf, long int offset, int whence)
     case SEEK_END:
     {
         if ((offset + idxEnd) >= 0 && (offset + idxEnd) <= idxEnd) {
-            mf->cursor += offset;
+            mf->cursor = idxEnd + offset + 1;
             return 0;
         }
     }
@@ -92,9 +92,9 @@ size_t mfread (void *ptr, size_t size, size_t n, MEMFILE *mf)
     while ((read_count < n) && (read_count*size <= (mf->size - mf->cursor))) {
         read_count++;
     }
-    memcpy(ptr, mf->ptr, read_count*size);
+    memcpy(ptr, mf->ptr + mf->cursor, read_count*size);
     mf->cursor += read_count*size;
-    assert(mf->cursor <= mf->size - 1);
+    assert(mf->cursor <= mf->size);
     return read_count;
 }
 
@@ -109,8 +109,8 @@ size_t mfwrite (const void *ptr, size_t size, size_t n, MEMFILE *mf) //TODO: mem
     while ((write_count < n) && (write_count*size <= (mf->size - mf->cursor))) {
         write_count++;
     }
-    memcpy(mf->ptr, ptr, write_count*size);
+    memcpy(mf->ptr + mf->cursor, ptr, write_count*size);
     mf->cursor += write_count*size;
-    assert(mf->cursor <= mf->size - 1);
+    assert(mf->cursor <= mf->size);
     return write_count;
 }

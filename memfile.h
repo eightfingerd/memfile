@@ -7,7 +7,6 @@
 #ifndef __MEM_FILE_H
 #define __MEM_FILE_H
 
-#include "typedefs.h"
 #include <stdlib.h>
 
 #ifdef __cplusplus
@@ -17,6 +16,11 @@ extern "C" {
 #define SEEK_SET	0	/* Seek from beginning of file.  */
 #define SEEK_CUR	1	/* Seek from current position.  */
 #define SEEK_END	2	/* Seek from end of file.  */
+
+typedef enum {
+	False = 0,
+	True = 1
+} Bool;
 
 typedef struct _MEMFILE {
     char*       ptr;
